@@ -25,12 +25,12 @@ module.exports = async (req, res) => {
   const $ = await fetch("https://dining.brown.edu/cafe/verney-woolley")
     .then((res) => res.text())
     .then(cheerio.load);
-  const currentMeal = $(".site-panel__cafeinfo-currently")
+  const [, currentMeal] = $(".site-panel__cafeinfo-currently")
     .text()
     .trim()
-    .match(mealRe)?.[1];
+    .match(mealRe) || [, null];
 
-  const meal = currentMeal ?? 'Breakfast';
+  const meal = currentMeal || 'Breakfast';
 
   res.status(200).json({
     meal,
