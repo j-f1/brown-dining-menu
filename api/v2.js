@@ -22,7 +22,7 @@ function parse(item) {
 const mealRe = /^Serving (\w+)/;
 
 module.exports = async (req, res) => {
-  const $ = await fetch("https://dining.brown.edu/cafe/verney-woolley")
+  const $ = await fetch("https://dining.brown.edu/cafe/sharpe-refectory")
     .then((res) => res.text())
     .then(cheerio.load);
   const [, currentMeal] = $(".site-panel__cafeinfo-currently")
@@ -30,10 +30,10 @@ module.exports = async (req, res) => {
     .trim()
     .match(mealRe) || [, null];
 
-  const meal = currentMeal || 'Breakfast';
+  const meal = currentMeal || "Breakfast";
 
   res.status(200).json({
-    meal,
+    meal: `Ratty ${currentMeal}`,
     open: currentMeal != null,
     menu: map($(`#${meal.toLowerCase()} .site-panel__daypart-item`), parse),
   });
